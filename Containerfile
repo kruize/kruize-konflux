@@ -68,7 +68,7 @@ RUN microdnf --setopt=install_weak_deps=0 --setopt=tsflags=nodocs install -y tzd
 COPY LICENSE /licenses/
 
 LABEL name="Kruize Autotune" \
-      vendor="Red Hat" \
+      vendor="Red Hat, Inc." \
       version=${AUTOTUNE_VERSION} \
       release=${AUTOTUNE_VERSION} \
       run="docker run --rm -it -p 8080:8080 <image_name:tag>" \
