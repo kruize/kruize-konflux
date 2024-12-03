@@ -33,13 +33,13 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 WORKDIR $AUTOTUNE_HOME/src/autotune
 
 # Copy only the pom.xml and download the dependencies
-COPY autotune_rm/pom.xml $AUTOTUNE_HOME/src/autotune/
+COPY autotune_mvp/pom.xml $AUTOTUNE_HOME/src/autotune/
 RUN mvn -f pom.xml install dependency:copy-dependencies
 
 # Now copy the sources and compile and package them
-COPY autotune_rm/src $AUTOTUNE_HOME/src/autotune/src/
+COPY autotune_mvp/src $AUTOTUNE_HOME/src/autotune/src/
 RUN mvn -f pom.xml clean package
-COPY autotune_rm/migrations target/bin/migrations
+COPY autotune_mvp/migrations target/bin/migrations
 
 
 
