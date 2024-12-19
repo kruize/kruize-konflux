@@ -360,6 +360,8 @@ spec:
         value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
       - name: CACHI2_ARTIFACT
         value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
+      - name: ARGS
+        value: "--report --org=2b164c81-f9ad-458c-b23d-c7708c1fa6cf"
       runAfter:
       - build-image-index
       taskRef:
