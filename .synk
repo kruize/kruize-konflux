@@ -1,0 +1,7 @@
+# Snyk (https://snyk.io) policy file
+
+exclude:
+    global:
+        # Exclude a single file. For example, - test.spec.js
+            - autotune/scripts/kruize_metrics.py
+            - autotune_mvp/scripts/kruize_metrics.py
