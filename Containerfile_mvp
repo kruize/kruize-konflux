@@ -16,7 +16,7 @@
 ##########################################################
 #            Build Docker Image
 ##########################################################
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1741599792 as mvnbuild-jdk21
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1741850109 as mvnbuild-jdk21
 ARG USER=autotune
 ARG AUTOTUNE_HOME=/home/$USER
 
@@ -50,7 +50,7 @@ RUN jlink --strip-debug --compress 2 --no-header-files --no-man-pages --module-p
 #            Runtime Docker Image
 ##########################################################
 # Use ubi-minimal as the base image
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1741599792
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1741850109
 
 ARG AUTOTUNE_VERSION=test
 ARG USER=autotune
