@@ -360,6 +360,10 @@ spec:
         value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
       - name: CACHI2_ARTIFACT
         value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
+      - name: ARGS
+        value: "--project-name=kruize-mvpdemo --report --org=2b164c81-f9ad-458c-b23d-c7708c1fa6cf"
+      - name: IGNORE_FILE_PATHS
+        value: "autotune_mvp/scripts/kruize_metrics.py"
       runAfter:
       - build-image-index
       taskRef:
@@ -390,6 +394,56 @@ spec:
           value: clamav-scan
         - name: bundle
           value: quay.io/konflux-ci/tekton-catalog/task-clamav-scan:0.2@sha256:62c835adae22e36fce6684460b39206bc16752f1a4427cdbba4ee9afdd279670
+        - name: kind
+          value: task
+        resolver: bundles
+      when:
+      - input: $(params.skip-checks)
+        operator: in
+        values:
+        - "false"
+    - name: sast-shell-check
+      params:
+      - name: image-digest
+        value: $(tasks.build-image-index.results.IMAGE_DIGEST)
+      - name: image-url
+        value: $(tasks.build-image-index.results.IMAGE_URL)
+      - name: SOURCE_ARTIFACT
+        value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
+      - name: CACHI2_ARTIFACT
+        value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
+      runAfter:
+      - build-image-index
+      taskRef:
+        params:
+        - name: name
+          value: sast-shell-check-oci-ta
+        - name: bundle
+          value: quay.io/konflux-ci/tekton-catalog/task-sast-shell-check-oci-ta:0.1@sha256:a591675c72f06fb9c5b1a3d60e6e4c58e4df5f7da180c7a4691a692a6e7e6496
+        - name: kind
+          value: task
+        resolver: bundles
+      when:
+      - input: $(params.skip-checks)
+        operator: in
+        values:
+        - "false"
+    - name: sast-unicode-check
+      params:
+      - name: image-url
+        value: $(tasks.build-image-index.results.IMAGE_URL)
+      - name: SOURCE_ARTIFACT
+        value: $(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)
+      - name: CACHI2_ARTIFACT
+        value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
+      runAfter:
+      - build-image-index
+      taskRef:
+        params:
+        - name: name
+          value: sast-shell-check-oci-ta
+        - name: bundle
+          value: quay.io/konflux-ci/tekton-catalog/task-sast-shell-check-oci-ta:0.1@sha256:a591675c72f06fb9c5b1a3d60e6e4c58e4df5f7da180c7a4691a692a6e7e6496
         - name: kind
           value: task
         resolver: bundles
