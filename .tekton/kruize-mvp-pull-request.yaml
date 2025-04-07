@@ -439,7 +439,7 @@ spec:
         - name: name
           value: sast-coverity-check-oci-ta
         - name: bundle
-          value: quay.io/kdudka/sast-coverity-check:latest 
+          value: quay.io/kdudka/sast-coverity-check-oci-ta:latest
         - name: kind
           value: task
         resolver: bundles
