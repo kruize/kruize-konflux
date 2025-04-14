@@ -16,7 +16,7 @@
 ##########################################################
 #            Build Docker Image
 ##########################################################
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1742914212 as mvnbuild-jdk21
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1741599792 as mvnbuild-jdk21
 ARG USER=autotune
 ARG AUTOTUNE_HOME=/home/$USER
 
