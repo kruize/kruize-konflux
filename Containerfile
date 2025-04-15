@@ -41,8 +41,6 @@ COPY autotune/src $AUTOTUNE_HOME/src/autotune/src/
 RUN mvn -f pom.xml clean package
 COPY autotune/migrations target/bin/migrations
 
-
-
 # Create a jlinked JRE specific to the App
 RUN jlink --strip-debug --compress 2 --no-header-files --no-man-pages --module-path $AUTOTUNE_HOME/java/openjdk/jmods --add-modules java.base,java.compiler,java.desktop,java.logging,java.management,java.naming,java.security.jgss,java.sql,java.xml,jdk.compiler,jdk.httpserver,jdk.unsupported,jdk.crypto.ec --exclude-files=**java_**.properties,**J9TraceFormat**.dat,**OMRTraceFormat**.dat,**j9ddr**.dat,**public_suffix_list**.dat --output jre
 
@@ -50,7 +48,7 @@ RUN jlink --strip-debug --compress 2 --no-header-files --no-man-pages --module-p
 #            Runtime Docker Image
 ##########################################################
 # Use ubi-minimal as the base image
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1742914212
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.5-1741599792
 
 ARG AUTOTUNE_VERSION=test
 ARG USER=autotune
@@ -92,6 +90,10 @@ USER ${UID}
 COPY --chown=${UID}:0 --from=mvnbuild-jdk21 ${AUTOTUNE_HOME}/src/autotune/jre/ ${AUTOTUNE_HOME}/app/jre/
 # Copy the app binaries
 COPY --chown=${UID}:0 --from=mvnbuild-jdk21 ${AUTOTUNE_HOME}/src/autotune/target/ ${AUTOTUNE_HOME}/app/target/
+
+# Copy the metric and metadata profile JSON file path into the runtime image
+COPY autotune/manifests/autotune/performance-profiles/resource_optimization_local_monitoring.json ${AUTOTUNE_HOME}/app/manifests/autotune/performance-profiles/resource_optimization_local_monitoring.json
+COPY autotune/manifests/autotune/metadata-profiles/bulk_cluster_metadata_local_monitoring.json ${AUTOTUNE_HOME}/app/manifests/autotune/metadata-profiles/bulk_cluster_metadata_local_monitoring.json
 
 # Grant execute permission
 RUN chmod -R +x $AUTOTUNE_HOME/app/target/bin/
