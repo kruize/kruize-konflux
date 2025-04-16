@@ -29,12 +29,17 @@ jobs:
         run: |
        
           git submodule update --remote --merge
-          git add demo2
+          git add autotune
           
           if [[ -n $(git diff --cached) ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git commit -m "Update submodule to latest commit"
+	    OLD=$(git ls-tree HEAD autotune | awk '{print $3}' | cut -c1-7)
+            NEW=$(git -C autotune rev-parse --short HEAD)
+            echo "UPDATE_MSG=Update autotune digest from $OLD to $NEW" >> $GITHUB_ENV
+            MSG="Update autotune digest to $NEW"
+            echo "MSG=$MSG" >> $GITHUB_ENV
+            git commit -m "$MSG"
             echo "Done"
           else
             echo "No changes detected in submodule."
@@ -45,8 +50,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update submodule to latest commit"
-          title: "Auto-update submodule"
-          body: "This PR updates the submodule to the latest upstream changes."
+	  commit-message: ${{ env.MSG }}
+          title: ${{ env.MSG }}
+          body: ${{ env.UPDATE_MSG }}
           base: main
-          
