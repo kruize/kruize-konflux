@@ -1,0 +1,53 @@
+name: Update git submodule and raise PR
+
+on:
+  on:
+  schedule:
+    - cron: "0 0 * * *" # Runs this workflow every day at midnight
+  workflow_dispatch: # For manually triggering the workflow
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Downstream Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check token permissions
+        run: gh auth status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Submodule
+        run: |
+       
+          git submodule update --remote --merge
+          git add demo2
+          
+          if [[ -n $(git diff --cached) ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "Update submodule to latest commit"
+            echo "Done"
+          else
+            echo "No changes detected in submodule."
+            exit 0
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update submodule to latest commit"
+          title: "Auto-update submodule"
+          body: "This PR updates the submodule to the latest upstream changes."
+          base: main
+          
