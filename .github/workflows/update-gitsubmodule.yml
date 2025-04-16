@@ -33,7 +33,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             OLD=$(git ls-tree HEAD autotune | awk '{print $3}' | cut -c1-7)
-            NEW=$(git -C autotune rev-parse --short HEAD)
+            NEW=$(git -C autotune rev-parse HEAD | cut -c1-7)
             echo "UPDATE_MSG=Update autotune digest from $OLD to $NEW" >> $GITHUB_ENV
             MSG="Update autotune digest to $NEW"
             echo "MSG=$MSG" >> $GITHUB_ENV
