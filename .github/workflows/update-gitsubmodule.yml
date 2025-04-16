@@ -1,4 +1,4 @@
-name: Update git submodule and raise PR
+name: Update git submodule
 
 on:
   schedule:
@@ -26,14 +26,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Submodule
-        run: | 
+        run: |
           git submodule update --remote --merge
           git add autotune
-          
           if [[ -n $(git diff --cached) ]]; then
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-	    OLD=$(git ls-tree HEAD autotune | awk '{print $3}' | cut -c1-7)
+            OLD=$(git ls-tree HEAD autotune | awk '{print $3}' | cut -c1-7)
             NEW=$(git -C autotune rev-parse --short HEAD)
             echo "UPDATE_MSG=Update autotune digest from $OLD to $NEW" >> $GITHUB_ENV
             MSG="Update autotune digest to $NEW"
@@ -49,7 +48,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-	  commit-message: ${{ env.MSG }}
+          commit-message: ${{ env.MSG }}
           title: ${{ env.MSG }}
           body: ${{ env.UPDATE_MSG }}
           base: main
