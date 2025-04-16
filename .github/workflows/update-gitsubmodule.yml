@@ -1,7 +1,6 @@
 name: Update git submodule and raise PR
 
 on:
-  on:
   schedule:
     - cron: "0 0 * * *" # Runs this workflow every day at midnight
   workflow_dispatch: # For manually triggering the workflow
