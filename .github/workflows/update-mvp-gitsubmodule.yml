@@ -1,0 +1,55 @@
+name: Update mvp git submodule
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs this workflow every day at midnight
+  workflow_dispatch: # For manually triggering the workflow
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Downstream Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check token permissions
+        run: gh auth status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Submodule
+        run: |
+          git submodule update --remote --merge
+          git add autotune_mvp
+          if [[ -n $(git diff --cached) ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            OLD=$(git ls-tree HEAD autotune_mvp | awk '{print $3}' | cut -c1-7)
+            NEW=$(git -C autotune_mvp rev-parse HEAD | cut -c1-7)
+            echo "UPDATE_MSG=Update autotune_mvp digest from $OLD to $NEW" >> $GITHUB_ENV
+            MSG="Update autotune_mvp digest to $NEW"
+            echo "MSG=$MSG" >> $GITHUB_ENV
+            git commit -m "$MSG"
+            echo "Done"
+          else
+            echo "No changes detected in submodule."
+            exit 0
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: ${{ env.MSG }}
+          title: ${{ env.MSG }}
+          body: ${{ env.UPDATE_MSG }}
+          base: mvp_demo
+
