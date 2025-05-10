@@ -364,9 +364,9 @@ spec:
       - name: CACHI2_ARTIFACT
         value: $(tasks.prefetch-dependencies.results.CACHI2_ARTIFACT)
       - name: ARGS
-        value: "--project-name=kruize --report --org=2b164c81-f9ad-458c-b23d-c7708c1fa6cf"
+        value: --project-name=kruize --report --org=2b164c81-f9ad-458c-b23d-c7708c1fa6cf
       - name: IGNORE_FILE_PATHS
-        value: "autotune/scripts/kruize_metrics.py"
+        value: autotune/scripts/kruize_metrics.py
       runAfter:
       - build-image-index
       taskRef:
@@ -520,7 +520,8 @@ spec:
       optional: true
     - name: netrc
       optional: true
-  taskRunTemplate: {}
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-kruize
   workspaces:
   - name: git-auth
     secret:
