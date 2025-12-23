@@ -49,7 +49,7 @@ RUN jlink --strip-debug --compress 2 --no-header-files --no-man-pages --module-p
 #            Runtime Docker Image
 ##########################################################
 # Use ubi-minimal as the base image
-FROM registry.access.redhat.com/ubi10/ubi-minimal:10.1-1764604111 as mvnbuild-jdk25
+FROM registry.access.redhat.com/ubi10/ubi-minimal:10.1-1764604111
 
 ARG AUTOTUNE_VERSION=test
 ARG USER=autotune
