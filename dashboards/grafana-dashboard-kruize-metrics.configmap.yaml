@@ -3492,7 +3492,7 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "sum by (pod) (jvm_memory_max_bytes{area=\"heap\", container=\"kruize-recommendations\", id=~\".+ (Eden Space|Old Gen|Survivor Space)\"})",
+              "expr": "sum by (pod) (jvm_memory_max_bytes{area=\"heap\", container=\"kruize-recommendations\", id=~\".+ (Eden Space|Old Gen|Survivor Space)\"})/1024/1024",
               "hide": false,
               "legendFormat": "__auto",
               "range": true,
@@ -3515,7 +3515,7 @@ data:
               "refId": "C"
             }
           ],
-          "title": "Heap Max",
+          "title": "Heap Max (MiB)",
           "type": "timeseries"
         },
         {
@@ -3611,7 +3611,7 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "sum by (pod) (jvm_memory_committed_bytes{area=\"heap\", container=\"kruize-recommendations\", id=~\".+ (Eden Space|Old Gen|Survivor Space)\"})",
+              "expr": "sum by (pod) (jvm_memory_committed_bytes{area=\"heap\", container=\"kruize-recommendations\", id=~\".+ (Eden Space|Old Gen|Survivor Space)\"})/1024/1024",
               "hide": false,
               "legendFormat": "__auto",
               "range": true,
@@ -3730,7 +3730,7 @@ data:
           "targets": [
             {
               "editorMode": "code",
-              "expr": "sum by (pod) (jvm_memory_used_bytes{area=\"heap\", container=\"kruize-recommendations\", id=~\".+ (Eden Space|Old Gen|Survivor Space)\"})",
+              "expr": "sum by (pod) (jvm_memory_used_bytes{area=\"heap\", container=\"kruize-recommendations\", id=~\".+ (Eden Space|Old Gen|Survivor Space)\"})/1024/1024",
               "hide": false,
               "legendFormat": "__auto",
               "range": true,
