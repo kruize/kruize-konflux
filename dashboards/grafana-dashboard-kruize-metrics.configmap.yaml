@@ -3634,7 +3634,7 @@ data:
               "refId": "C"
             }
           ],
-          "title": "Heap Committed",
+          "title": "Heap Committed (MiB)",
           "type": "timeseries"
         },
         {
@@ -3753,7 +3753,7 @@ data:
               "refId": "C"
             }
           ],
-          "title": "Heap Usage",
+          "title": "Heap Usage (MiB)",
           "type": "timeseries"
         },
         {
