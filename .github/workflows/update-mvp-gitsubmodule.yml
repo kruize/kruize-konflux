@@ -31,14 +31,11 @@ jobs:
           git submodule update --remote --merge
           git add autotune_mvp
           if [[ -n $(git diff --cached) ]]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
             OLD=$(git ls-tree HEAD autotune_mvp | awk '{print $3}' | cut -c1-7)
             NEW=$(git -C autotune_mvp rev-parse HEAD | cut -c1-7)
             echo "UPDATE_MSG=Update autotune_mvp digest from $OLD to $NEW" >> $GITHUB_ENV
             MSG="Update autotune_mvp digest to $NEW"
             echo "MSG=$MSG" >> $GITHUB_ENV
-            git commit -m "$MSG"
             echo "Done"
           else
             echo "No changes detected in submodule."
@@ -46,11 +43,13 @@ jobs:
           fi
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: ${{ env.MSG }}
           title: ${{ env.MSG }}
           body: ${{ env.UPDATE_MSG }}
           base: mvp_demo
+          sign-commits: true
+          force-push: false
 
