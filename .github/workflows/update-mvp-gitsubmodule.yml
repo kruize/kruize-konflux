@@ -50,5 +50,4 @@ jobs:
           body: ${{ env.UPDATE_MSG }}
           base: mvp_demo
           sign-commits: true
-          force-push: false
 
