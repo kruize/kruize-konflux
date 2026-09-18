@@ -50,4 +50,3 @@ jobs:
           body: ${{ env.UPDATE_MSG }}
           base: main
           sign-commits: true
-          force-push: false
